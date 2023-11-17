@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// ----------------------------- JWT-Auth ------------------------------ //
+Route::post('/register', [AuthController::class,'register'])->name('jwt.register');
+Route::post('/login', [AuthController::class,'login'])->name('jwt.login');
+
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::post('/logout', [AuthController::class,'logout'])->name('jwt.logout');
 });

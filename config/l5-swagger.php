@@ -5,7 +5,16 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'Authentication Microservice API Documentation',
+                'version' => '1.0.0',
+                'base_path' => env('L5_SWAGGER_BASE_PATH', '/api'),
+                'description' => 'Documentation for the Authentication Microservice API.',
+                'consumes' => [
+                    'application/json',
+                ],
+                'produces' => [
+                    'application/json',
+                ],
             ],
 
             'routes' => [
