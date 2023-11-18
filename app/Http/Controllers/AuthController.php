@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Annotations as OA;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
@@ -184,10 +185,24 @@ class AuthController extends Controller
  * )
  */
 
-    public function refreshToken()
+    /**
+     * Refresh a user's token.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function refresh()
     {
-        $token = JWTAuth::refresh();
-        return response()->json(['token' => $token]);
+        try {
+            // Attempt to refresh the token
+            $newToken = JWTAuth::refresh(JWTAuth::getToken());
+
+            // If the token refresh is successful, return the new token
+            return response()->json(['message' => 'Token refreshed successfully !','token' => $newToken]);
+        } catch (JWTException $e) {
+            // If an exception occurs during token refresh, return an error response
+            return response()->json(['error' => 'Unauthorized action'], 401);
+        }
     }
 
     /**
@@ -227,6 +242,6 @@ class AuthController extends Controller
     public function logout()
     {
         JWTAuth::invalidate();
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'Logged out successfully !']);
     }
 }

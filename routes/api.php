@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,10 +15,3 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// ----------------------------- JWT-Auth ------------------------------ //
-Route::post('/register', [AuthController::class,'register'])->name('jwt.register');
-Route::post('/login', [AuthController::class,'login'])->name('jwt.login');
-
-Route::group(['middleware' => 'jwt.auth'], function () {
-    Route::post('/logout', [AuthController::class,'logout'])->name('jwt.logout');
-});

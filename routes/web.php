@@ -18,3 +18,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// ----------------------------- JWT-Auth ------------------------------ //
+
+Route::post('/api/register', [AuthController::class,'register'])->name('jwt.register');
+Route::post('/api/login', [AuthController::class,'login'])->name('jwt.login');
+Route::post('/api/refresh', [AuthController::class,'refresh'])->name('jwt.refresh');
+
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::post('/api/logout', [AuthController::class,'logout'])->name('jwt.logout');
+});
+
