@@ -1,0 +1,112 @@
+# Authentication Microservice Setup Instructions
+
+## Prerequisites
+
+1. **PHP**: Ensure that you have PHP installed on your machine. Download it from [https://www.php.net/downloads.php].
+
+2. **Composer**: Install Composer, the PHP dependency manager, by following the instructions at [https://getcomposer.org/download/].
+
+3. **MySQL**: Set up a MySQL database server. You can use tools like XAMPP or MAMP for a local development environment.
+
+4. **Laravel**: Install the Laravel framework globally using Composer.
+
+    ```bash
+    composer global require laravel/installer
+    ```
+
+5. **Git**: Make sure Git is installed on your machine. Download it from [https://git-scm.com/downloads].
+
+## Setup Instructions
+
+1. **Clone the Repository:**
+
+    ```bash
+    git clone https://github.com/Ahmedmaghrapy11/auth-microservice.git
+    cd authentication-microservice
+    ```
+
+2. **Install Dependencies:**
+
+    ```bash
+    composer install
+    ```
+
+3. **Create .env file:**
+
+    - Copy the example environment file:
+
+        ```bash
+        cp .env.example .env
+        ```
+
+    - Edit the `.env` file and set the database connection details.
+
+4. **Generate Application Key:**
+
+    ```bash
+    php artisan key:generate
+    ```
+
+5. **Run Migrations:**
+
+    ```bash
+    php artisan migrate
+    ```
+
+6. **Start the Development Server:**
+
+    ```bash
+    php artisan serve
+    ```
+
+    Access the application at [http://localhost:8000].
+
+7. **Run Tests:**
+
+    ```bash
+    php artisan test
+    ```
+
+    Ensure that all tests pass successfully.
+
+## API Documentation
+
+1. **Swagger UI:**
+
+    - Access the Swagger UI for API documentation at [http://localhost:8000/api/documentation].
+
+## RabbitMQ Setup (Optional)
+
+1. **Install RabbitMQ:**
+
+    - Follow the RabbitMQ installation instructions for your operating system [https://www.rabbitmq.com/download.html].
+
+2. **Configure RabbitMQ Connection:**
+
+    - Update the RabbitMQ connection details in the `.env` file.
+
+3. **Run RabbitMQ Server:**
+
+    - Start the RabbitMQ server.
+
+4. **Run Consumer for Communication (Optional):**
+
+    - If you have a RabbitMQ consumer for communication with other microservices, start it.
+
+## Authentication Service Communication (Optional)
+
+1. **Configure Microservices Connection:**
+
+    - Update the connection details for other microservices (e.g., Notes microservice) in the `.env` file.
+
+2. **Run Microservices:**
+
+    - Start other microservices.
+
+3. **Verify Communication:**
+
+    - Test that the Authentication microservice can communicate with other microservices securely.
+
+---
+
+Congratulations! You have successfully set up the Authentication microservice locally. If you encounter any issues, refer to the project documentation or seek assistance from the development team.
