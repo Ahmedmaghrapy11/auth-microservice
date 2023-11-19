@@ -9,9 +9,18 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 use OpenApi\Annotations as OA;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Log;
+use App\Services\RabbitMQService;
 
 class AuthController extends Controller
 {
+
+    protected $rabbitMQService;
+
+    public function __construct(RabbitMQService $rabbitMQService)
+    {
+        $this->rabbitMQService = $rabbitMQService;
+    }
 
 /**
  * @OA\Info(
@@ -91,6 +100,13 @@ class AuthController extends Controller
             'password' => bcrypt($request['password']),
         ]);
         $token = JWTAuth::fromUser($user);
+        $this->rabbitMQService->connect();
+        $channel = $this->rabbitMQService->channel();
+        $channel->exchangeDeclare('authentication_exchange', 'direct', false, true, false);
+        $channel->publish('User authenticated', [], 'authentication_queue');
+        $this->rabbitMQService->disconnect();
+        event(new \App\Events\UserAuthenticated($user->id));
+        Log::info("UserAuthenticated event dispatched for user ID: " . $user->id);
         return response()->json(['message' => 'A new user has registered successfully!', 'token' => $token]);
     }
 
@@ -140,6 +156,8 @@ class AuthController extends Controller
         if (!$token = JWTAuth::attempt($data)) {
             return response()->json(["error"=> "Invalid email or password, Please try again !"], 401);
         }
+        $userId = auth()->user()->id;
+        event(new \App\Events\UserAuthenticated($userId));
         return response()->json(["message"=> "Logged in successfully!", 'token' => $token]);
     }
 

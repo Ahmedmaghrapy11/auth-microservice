@@ -26,7 +26,7 @@ class AuthTest extends TestCase
         ]);
 
         // Attempt to log in
-        $response = $this->post('/login', [
+        $response = $this->post('/api/login', [
             'email' => $user->email,
             'password' => 'Password11**',
         ]);
@@ -38,7 +38,7 @@ class AuthTest extends TestCase
     public function testUserCanRegister()
     {
         // Simulate user registration
-        $response = $this->post('/register', [
+        $response = $this->post('/api/register', [
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => 'Password11**',
@@ -59,10 +59,10 @@ class AuthTest extends TestCase
         $token = JWTAuth::fromUser($user);
 
         // Simulate user logout
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])->post('/logout');
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . $token])->post('/api/logout');
 
         $response->assertStatus(200);
-        $this->assertEquals('Successfully logged out', $response->json('message'));
+        $this->assertEquals('Logged out successfully !', $response->json('message'));
     }
 
 }

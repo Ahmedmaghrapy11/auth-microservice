@@ -71,6 +71,26 @@ return [
             'after_commit' => false,
         ],
 
+        'enqueue' => [
+            'driver' => 'enqueue',
+            'connection' => 'rabbitmq',
+            'queue' => 'default',
+            'retry_after' => 90,
+        ],
+        'rabbitmq' => [
+            'driver' => 'rabbitmq',
+            'host' => env('RABBITMQ_HOST', 'localhost'),
+            'port' => env('RABBITMQ_PORT', 5672),
+            'vhost' => env('RABBITMQ_VHOST', '/'),
+            'login' => env('RABBITMQ_USER', 'guest'),
+            'password' => env('RABBITMQ_PASSWORD', 'guest'),
+            'options' => [
+                'ssl_options' => [
+                    'verify_peer' => false,
+                ],
+            ],
+        ],
+
     ],
 
     /*
