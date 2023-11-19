@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserAuthenticated;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use OpenApi\Annotations as OA;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Log;
 use App\Services\RabbitMQService;
+use Illuminate\Support\Facades\Event;
 
 class AuthController extends Controller
 {
@@ -105,7 +107,7 @@ class AuthController extends Controller
         $channel->exchangeDeclare('authentication_exchange', 'direct', false, true, false);
         $channel->publish('User authenticated', [], 'authentication_queue');
         $this->rabbitMQService->disconnect();
-        event(new \App\Events\UserAuthenticated($user->id));
+        Event::dispatch(new UserAuthenticated($user->id));
         Log::info("UserAuthenticated event dispatched for user ID: " . $user->id);
         return response()->json(['message' => 'A new user has registered successfully!', 'token' => $token]);
     }
@@ -157,7 +159,7 @@ class AuthController extends Controller
             return response()->json(["error"=> "Invalid email or password, Please try again !"], 401);
         }
         $userId = auth()->user()->id;
-        event(new \App\Events\UserAuthenticated($userId));
+        Event::dispatch(new UserAuthenticated($userId));
         return response()->json(["message"=> "Logged in successfully!", 'token' => $token]);
     }
 
