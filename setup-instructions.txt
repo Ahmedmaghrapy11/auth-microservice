@@ -110,3 +110,10 @@
 ---
 
 Congratulations! You have successfully set up the Authentication microservice locally. If you encounter any issues, refer to the project documentation or seek assistance from the development team.
+
+
+## IMPORTANT NOTE: password MUST have:
+    1. English uppercase (A-Z)
+    2. English lowercase (a-z)
+    3. Numbers (0-9)
+    4. Non-alphanumeric (! - $ - # - * - %)
